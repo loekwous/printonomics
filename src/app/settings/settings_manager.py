@@ -86,12 +86,13 @@ class SettingsManager:
             with open(self.settings_file, "r") as file:
                 self.settings_raw = json.load(file)
         except FileNotFoundError:
-            self.settings_raw = {}
+            logging.info("Error reading settings file.")
+            self.settings_raw = {"settings": []}
         except json.JSONDecodeError:
-            print(
+            logging.warning(
                 "Error decoding JSON from settings file. Starting with empty settings."
             )
-            self.settings_raw = {}
+            self.settings_raw = {"settings": []}
 
     @property
     def setting_names(self):

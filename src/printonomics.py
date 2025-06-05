@@ -1,5 +1,7 @@
 import customtkinter as ctk
 import logging
+import os
+import sys
 
 from help_frame import HelpFrame
 
@@ -10,6 +12,17 @@ from app.settings import (
     IntSliderSettingSkeleton,
     StringSettingSkeleton,
 )
+
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 # setup logging
@@ -89,8 +102,9 @@ class Printonomics(Application):
         )
         self.add_new_frame("FrameDemo", FrameDemo)
         self.add_controller(ControlDemo())
-        self.set_icon("assets/printonomics.ico")
-        self.set_logo("assets/printonomics.jpg")
+
+        self.set_icon(resource_path("assets/printonomics.ico"))
+        self.set_logo(resource_path("assets/printonomics.jpg"))
         self.refresh_rate = 100
 
 

@@ -1,6 +1,8 @@
 import customtkinter as ctk
 import logging
 from PIL import Image
+import sys
+import os
 
 from app.app_frame import AppFrameInterface
 from .events.app_events import MenuEvent
@@ -143,7 +145,12 @@ class Application(ctk.CTkToplevel):
 
         self._refresh_rate = 100  # milliseconds
 
-        ctk.set_default_color_theme("assets/theme.json")
+        # If theme file not found, try to load from PyInstaller bundle
+        if hasattr(sys, "_MEIPASS"):
+            theme_path = os.path.join(sys._MEIPASS, "assets", "theme.json")
+        else:
+            theme_path = "assets/theme.json"
+        ctk.set_default_color_theme(theme_path)
 
         # Get screen dimensions
         screen_width = self.winfo_screenwidth()
@@ -182,6 +189,7 @@ class Application(ctk.CTkToplevel):
         """Handle the window closing event."""
         logging.info("Application is closing.")
         FrameFactory.settings.save_settings()
+        self.quit()
         self.destroy()
 
     def set_icon(self, icon_path: str):
@@ -243,9 +251,3 @@ class Application(ctk.CTkToplevel):
             option.set_queue(self.event_queue)
             FrameFactory.settings.add_setting(option)
             logging.info(f"Added new option: {option.__class__.__name__}")
-
-
-if __name__ == "__main__":
-    app = ctk.CTk()
-    application = Application(name="Application", copyright="Loek © 2025", master=app)
-    application.mainloop()

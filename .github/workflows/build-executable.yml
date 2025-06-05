@@ -1,0 +1,30 @@
+name: Build windows executable
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  PACKAGE_NAME: "printonomics"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: batonogov/pyinstaller-windows:latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build executable
+      run: |
+        pip install -r src/requirements.txt
+        pyinstaller printonomics.spec
+
+    - name: publish executable      
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.PACKAGE_NAME }}
+        path: dist/
