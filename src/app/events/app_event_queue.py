@@ -1,7 +1,7 @@
 import queue
 import logging
 
-from events.app_events import AppEvent
+from .app_events import AppEvent
 
 
 class EventQueue:

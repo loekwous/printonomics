@@ -1,7 +1,7 @@
 import customtkinter as ctk
-from app_frame import AppFrame
+from app.app_frame import AppFrameSkeleton
 from help_content import HELP_SECTIONS
-from settings_manager import SettingsManager
+
 
 class HelpSection(ctk.CTkFrame):
     """A section that contains help information."""
@@ -12,23 +12,17 @@ class HelpSection(ctk.CTkFrame):
 
         # Create a label to display the section title
         self.title_label = ctk.CTkLabel(
-            self,
-            text=title,
-            font=("Arial", 16, "bold"),
-            justify="left"
+            self, text=title, font=("Arial", 16, "bold"), justify="left"
         )
         self.title_label.pack(padx=10, pady=5)
         # Create a label to display the help content
         self.help_label = ctk.CTkLabel(
-            self,
-            text=content,
-            justify="left",
-            wraplength=500
+            self, text=content, justify="left", wraplength=500
         )
         self.help_label.pack(padx=10, pady=5)
 
 
-class HelpFrame(AppFrame):
+class HelpFrame(AppFrameSkeleton):
     """A frame that displays help information."""
 
     def __init__(self, *args, **kwargs):
@@ -38,11 +32,7 @@ class HelpFrame(AppFrame):
         self._help_sections: list[HelpSection] = []
 
         self.scrollable_frame = ctk.CTkScrollableFrame(
-            self,
-            width=400,
-            height=300,
-            corner_radius=10,
-            fg_color="transparent"
+            self, width=400, height=300, corner_radius=10, fg_color="transparent"
         )
         self.scrollable_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
@@ -51,7 +41,7 @@ class HelpFrame(AppFrame):
             self.scrollable_frame,
             text="This is the help section. Here you can find information about how to use the application.",
             justify="left",
-            wraplength=400
+            wraplength=400,
         )
         self.help_label.pack(padx=20, pady=20)
 
@@ -68,7 +58,7 @@ class HelpFrame(AppFrame):
             section = HelpSection(
                 title=section["title"],
                 content=section["text"],
-                master=self.scrollable_frame
+                master=self.scrollable_frame,
             )
             section.pack(fill="x", padx=10, pady=5)
             self._help_sections.append(section)

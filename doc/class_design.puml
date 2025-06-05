@@ -1,0 +1,49 @@
+@startuml
+class AppFrameInterface{
++ set_queue(EventQueue)
++ on_event(AppEvent)
++ push_event(AppEvent)
++ get_name(): str
+}
+
+class AppFrameSkeleton{
+- name: str
+- event_queue: queue
+}
+
+
+class AppController{
+    + set_queue(EventQueue)
+    + add_control_logic(AppControlLogicInterface)
+    + init()
+    + process_events()
+    - event_queue: queue
+}
+
+class AppControlLogicInterface{
++ set_queue(EventQueue)
++ on_event(AppEvent)
++ push_event(AppEvent)
++ init()
+}
+
+note top of AppController: Controls event handling and control blocks, responsible for polling the queue
+
+class Application{
+    + init()
+    - periodic_task()
+    - event_queue: queue
+}
+
+ctk.CtkFrame <|-- AppFrameInterface
+AppFrameInterface <|-- AppFrameSkeleton
+
+
+ctk.CtkTopLevel <|-- Application
+Application *- AppController: 1..1
+AppController o- AppControlLogicInterface: 1..*
+
+AppFrameInterface -* Application: 1..1
+
+note top of AppFrameInterface: name for button, queue for posting events
+@enduml
